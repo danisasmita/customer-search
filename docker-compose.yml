@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: customer_search_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: customer_search
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - customer_search_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customer_search_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: customer_search
+      DB_SSLMODE: disable
+      JWT_SECRET: your-secret-key
+      JWT_EXPIRATION: 24h
+    networks:
+      - customer_search_network
+
+volumes:
+  postgres_data:
+
+networks:
+  customer_search_network:
+    driver: bridge
