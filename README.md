@@ -4,8 +4,6 @@ Clone the repository from GitHub using the following command:
 
 git clone https://github.com/danisasmita/customer-search.git
 
-Replace repository-name with the actual name of the repository you want to clone.
-
 2. Navigate to the Project Directory
 
 cd customer-search
