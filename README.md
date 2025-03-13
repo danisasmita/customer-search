@@ -1,50 +1,90 @@
-1. Clone Repository
+# Customer Search - Setup Guide
 
-Clone the repository from GitHub using the following command:
+## 📥 Clone Backend Repository
 
+Clone the backend repository from GitHub:
+
+```bash
 git clone https://github.com/danisasmita/customer-search.git
+```
 
-2. Navigate to the Project Directory
+Navigate to the project directory:
 
+```bash
 cd customer-search
+```
 
-3. Create and Configure the .env File
+## ⚙️ Configure `.env`
 
-Copy the .env.example file to .env:
+Copy the `.env.example` file to `.env`:
 
+```bash
 cp .env.example .env
+```
 
-Then, open the .env file and configure the PostgreSQL database settings:
+Open the `.env` file and update the PostgreSQL database configuration:
 
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=your_username
-DB_PASSWORD=your_password
-DB_NAME=your_database
+```ini
+DB_HOST=localhost  
+DB_PORT=5432  
+DB_USER=your_username  
+DB_PASSWORD=your_password  
+DB_NAME=your_database  
+```
 
-Make sure to replace your_username, your_password, and your_database with the appropriate values.
+Replace `your_username`, `your_password`, and `your_database` with your actual database credentials.
 
-4. Install Dependencies
+## 📚 Install Dependencies
 
-Ensure you have Go installed, then run the following command to download the project dependencies:
+Ensure Go is installed, then run:
 
+```bash
 go mod tidy
+```
 
-5. Run Database Migration (Optional)
+## 🗂️ Run Database Migration & Seeding
 
-If the project requires database migration, run the following command:
+If the project requires database migration and initial data seeding, run:
 
-go run cmd/main.go migrate
+```bash
+go run cmd/main.go --migrate --seed
+```
 
-Or use the specific migration command for the project.
+After successful execution, you will see an output like this:
 
-6. Start the Application
 
-Use the following command to run the application:
+Data Seeded  
+Seeded Data. Here is the customer data seeded into the database:
+  
 
+- John Doe - john@example.com  
+- Jane Smith - jane@example.com  
+- Robert Johnson - robert@example.com  
+- Emily Davis - emily@example.com  
+- Michael Wilson - michael@example.com  
+- Sarah Brown - sarah@example.com  
+- David Lee - david@example.com  
+- Jennifer Taylor - jennifer@example.com  
+- Kevin Martinez - kevin@example.com  
+- Lisa Anderson - lisa@example.com  
+- Thomas Wright - thomas@example.com  
+```
+
+## 🚀 Start the Backend Server
+
+Run the following command to start the backend application:
+
+```bash
 go run cmd/main.go
+```
 
-Or if using air for hot reload:
+---
 
-air
+## 🎨 Clone Frontend Repository
+
+To register, log in, and search for customers, clone and run the frontend project:
+
+```bash
+git clone https://github.com/danisasmita/customer-search-app.git
+```
 
