@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"strconv"
 
@@ -8,6 +9,7 @@ import (
 	"github.com/danisasmita/customer-search/internal/handler"
 	"github.com/danisasmita/customer-search/internal/repository"
 	"github.com/danisasmita/customer-search/internal/service"
+	"github.com/danisasmita/customer-search/pkg/database"
 	"github.com/danisasmita/customer-search/pkg/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -16,6 +18,10 @@ import (
 )
 
 func main() {
+	migrate := flag.Bool("migrate", false, "Run database migrations")
+	seed := flag.Bool("seed", false, "Seed database with initial data")
+	flag.Parse()
+
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
@@ -24,7 +30,23 @@ func main() {
 	dsn := "host=" + cfg.DBHost + " user=" + cfg.DBUser + " password=" + cfg.DBPassword + " dbname=" + cfg.DBName + " port=" + strconv.Itoa(cfg.DBPort) + " sslmode=disable TimeZone=Asia/Jakarta"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatalf("failed to connect database: %v", err)
+	}
+
+	if *migrate {
+		err = database.AutoMigrate(db)
+		if err != nil {
+			log.Fatalf("failed to migrate database: %v", err)
+		}
+		log.Println("Migration completed successfully!")
+	}
+
+	if *seed {
+		err = database.SeedData(db)
+		if err != nil {
+			log.Fatalf("failed to seed database: %v", err)
+		}
+		log.Println("Seeding completed successfully!")
 	}
 
 	customerRepo := repository.NewCustomerRepository(db)
