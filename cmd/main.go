@@ -51,7 +51,7 @@ func main() {
 
 	customerRepo := repository.NewCustomerRepository(db)
 	customerService := service.NewCustomerService(customerRepo)
-	customerHandler := handler.NewCustomerHandler(*customerService)
+	customerHandler := handler.NewCustomerHandler(customerService)
 
 	userRepo := repository.NewUserRepository(db)
 	authService := service.NewAuthService(userRepo)
