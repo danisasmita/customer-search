@@ -70,6 +70,7 @@ Seeded Data. Here is the customer data seeded into the database:
 - Thomas Wright - thomas@example.com  
 ```
 
+```
 ## 🚀 Start the Backend Server
 
 Run the following command to start the backend application:
