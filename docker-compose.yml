@@ -28,10 +28,60 @@ services:
       DB_NAME: customer-search
       DB_PORT: 5432
       SERVER_ADDRESS: ":8080"
+      CORS_ALLOWED_ORIGINS: "http://localhost:8080,http://localhost:8081"
+      CORS_ALLOWED_METHODS: "GET,POST,PUT,DELETE,OPTIONS"
+      CORS_ALLOWED_HEADERS: "Origin,Content-Type,Accept,Authorization"
+      CORS_ALLOW_CREDENTIALS: "true"
+      CORS_EXPOSE_HEADERS: "Content-Length,Content-Type"
     ports:
       - "8080:8080"
     command: >
-      sh -c "sleep 10 && go run cmd/main.go --migrate && go run cmd/main.go --seed && go run cmd/main.go"
+      sh -c "sleep 10 && go run cmd/main.go --migrate --seed"
 
 volumes:
   db_data:
+
+#
+
+# version: '3.8'
+
+# services:
+#   db:
+#     image: postgres:15
+#     container_name: customer-search-db
+#     restart: always
+#     environment:
+#       POSTGRES_USER: daniwira
+#       POSTGRES_PASSWORD: dani123
+#       POSTGRES_DB: customer_search
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - db_data:/var/lib/postgresql/data
+
+#   backend:
+#     build:
+#       context: ./
+#     container_name: golang_backend
+#     restart: always
+#     depends_on:
+#       - db
+#     environment:
+#       DB_HOST: db
+#       DB_USER: daniwira
+#       DB_PASSWORD: dani123
+#       DB_NAME: customer_search
+#       DB_PORT: 5432
+#       SERVER_ADDRESS: ":8080"
+#       CORS_ALLOWED_ORIGINS: "http://localhost:8080,http://localhost:8081"
+#       CORS_ALLOWED_METHODS: "GET,POST,PUT,DELETE,OPTIONS"
+#       CORS_ALLOWED_HEADERS: "Origin,Content-Type,Accept,Authorization"
+#       CORS_ALLOW_CREDENTIALS: "true"
+#       CORS_EXPOSE_HEADERS: "Content-Length,Content-Type"
+#     ports:
+#       - "8080:8080"
+#     command: >
+#       sh -c "sleep 10 && go run cmd/main.go --migrate && go run cmd/main.go --seed && go run cmd/main.go"
+
+# volumes:
+#   db_data:
