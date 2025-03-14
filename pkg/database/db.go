@@ -5,6 +5,7 @@ import (
 
 	"github.com/danisasmita/customer-search/internal/config"
 	"github.com/danisasmita/customer-search/internal/model"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

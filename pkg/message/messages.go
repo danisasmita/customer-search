@@ -16,4 +16,6 @@ const (
 	EmailRequired    = "email is required"
 	UsernameRequired = "username is required"
 	PasswordRequired = "password is required"
+
+	SearchCustomer = "Please provide at least name, email, or account_number for the search"
 )

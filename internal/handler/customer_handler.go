@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/danisasmita/customer-search/internal/service"
+	"github.com/danisasmita/customer-search/pkg/message"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,24 +22,22 @@ func (h *CustomerHandler) SearchByName(c *gin.Context) {
 	accountNumber := c.Query("account_number")
 
 	if name == "" && email == "" && accountNumber == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Harap berikan setidaknya name, email, atau account_number untuk pencarian"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": message.SearchCustomer})
 		return
 	}
 
 	customers, err := h.service.SearchByName(name, email, accountNumber)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Terjadi kesalahan pada server"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": message.InternalServerError})
 		return
 	}
 
 	if len(customers) == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Customer tidak ditemukan"})
+		c.JSON(http.StatusNotFound, gin.H{"error": message.CustomerNotFound})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":  "success",
-		"message": "Customers found",
-		"data":    customers,
+		"data": customers,
 	})
 }

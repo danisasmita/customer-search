@@ -32,16 +32,6 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// hashedPassword, err := utils.HashPassword(user.Password)
-	// if err != nil {
-	// 	fmt.Println("Error hashing password:", err)
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
-	// 	return
-	// }
-	// user.Password = hashedPassword
-
-	// fmt.Println("Registering user:", user)
-
 	if err := h.service.Register(&user); err != nil {
 		fmt.Println("Error registering user:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": message.InternalServerError})
