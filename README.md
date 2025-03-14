@@ -79,6 +79,13 @@ Run the following command to start the backend application:
 go run cmd/main.go
 ```
 
+Run the following command to start the backend application with Docker:
+
+```bash
+docker-compose up --build
+```
+
+
 ---
 ## 🗂️ Run Unit Test
 
