@@ -69,10 +69,6 @@ Seeded Data. Here is the customer data seeded into the database:
 - Lisa Anderson - lisa@example.com  
 - Thomas Wright - thomas@example.com  
 ```
-## 🗂️ Run Unit Test
-```bash
-go test -v ./...
-```
 
 ## 🚀 Start the Backend Server
 
@@ -83,6 +79,11 @@ go run cmd/main.go
 ```
 
 ---
+## 🗂️ Run Unit Test
+
+```bash
+go test -v ./...
+```
 
 ## 🎨 Clone Frontend Repository
 
