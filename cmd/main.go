@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
+	"os"
 	"strconv"
 
 	"github.com/danisasmita/customer-search/internal/config"
@@ -22,12 +24,28 @@ func main() {
 	seed := flag.Bool("seed", false, "Seed database with initial data")
 	flag.Parse()
 
-	cfg, err := config.LoadConfig()
-	if err != nil {
-		log.Fatalf("failed to load config: %v", err)
+	// Ambil environment variable
+	cfg := config.Config{
+		DBHost:     getEnv("DB_HOST", "localhost"),
+		DBUser:     getEnv("DB_USER", "user"),
+		DBPassword: getEnv("DB_PASSWORD", "password"),
+		DBName:     getEnv("DB_NAME", "customer_search"),
+		DBPort:     getEnvAsInt("DB_PORT", 5432),
 	}
 
-	dsn := "host=" + cfg.DBHost + " user=" + cfg.DBUser + " password=" + cfg.DBPassword + " dbname=" + cfg.DBName + " port=" + strconv.Itoa(cfg.DBPort) + " sslmode=disable TimeZone=Asia/Jakarta"
+	// Print konfigurasi untuk debugging
+	fmt.Println("Database Configuration:")
+	fmt.Printf("Host: %s\n", cfg.DBHost)
+	fmt.Printf("User: %s\n", cfg.DBUser)
+	fmt.Printf("Database: %s\n", cfg.DBName)
+	fmt.Printf("Port: %d\n", cfg.DBPort)
+
+	// Buat DSN dari environment variables
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
+		cfg.DBHost, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBPort,
+	)
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
@@ -73,5 +91,28 @@ func main() {
 		authorized.GET("/customers", customerHandler.SearchByName)
 	}
 
-	r.Run(cfg.ServerAddress)
+	serverAddress := getEnv("SERVER_ADDRESS", ":8080")
+	log.Printf("Starting server on %s\n", serverAddress)
+	r.Run(serverAddress)
+}
+
+// Fungsi untuk mendapatkan environment variable dengan nilai default
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
+}
+
+// Fungsi untuk mendapatkan environment variable sebagai integer dengan nilai default
+func getEnvAsInt(key string, defaultValue int) int {
+	valueStr := getEnv(key, "")
+	if valueStr == "" {
+		return defaultValue
+	}
+	value, err := strconv.Atoi(valueStr)
+	if err != nil {
+		log.Fatalf("failed to convert %s to int: %v", key, err)
+	}
+	return value
 }
